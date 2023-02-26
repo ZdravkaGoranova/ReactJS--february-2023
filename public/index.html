@@ -1,132 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <title>Firebase Autentication </title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <body>
-     
 
-     
-        <script type="module">
-            // Import the functions you need from the SDKs you need
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-            import { getDatabase, ref, set, update } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
-            import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-     
-            // Your web app's Firebase configuration
-            const firebaseConfig = {
-                apiKey: "AIzaSyDRtthwkDX38Eto9gsa1wDDLIdmg1u-Neo",
-                authDomain: "woodworking-d9a7e.firebaseapp.com",
-                databaseURL: "https://woodworking-d9a7e-default-rtdb.firebaseio.com",
-                projectId: "woodworking-d9a7e",
-                storageBucket: "woodworking-d9a7e.appspot.com",
-                messagingSenderId: "260796999866",
-                appId: "1:260796999866:web:fca716eec1a4795d89ba83"
-            };
-     
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const database = getDatabase(app);
-            const auth = getAuth();
-     
-            // registerForm.addEventListener('submit', (e) => {
-            signUp.addEventListener('submit', (e) => {
-                e.preventDefault();
-                var username = document.getElementById('username').value;
-                var email = document.getElementById('email').value;
-                var password = document.getElementById('password').value;
-     
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Signed in 
-                        const user = userCredential.user;
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>Firebase Autentication </title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getDatabase, ref, set, update } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDRtthwkDX38Eto9gsa1wDDLIdmg1u-Neo",
+        authDomain: "woodworking-d9a7e.firebaseapp.com",
+        databaseURL: "https://woodworking-d9a7e-default-rtdb.firebaseio.com",
+        projectId: "woodworking-d9a7e",
+        storageBucket: "woodworking-d9a7e.appspot.com",
+        messagingSenderId: "260796999866",
+        appId: "1:260796999866:web:fca716eec1a4795d89ba83"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();
+
+    // registerForm.addEventListener('submit', (e) => {
+    signUp.addEventListener('submit', (e) => {
+        e.preventDefault();
+        var username = document.getElementById('username').value;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                const uid = user.uid;
+                const userRef = ref(database, 'users/' + uid);
+                const userData = {
+                    username: username,
+                    email: email
+                }
+                set(userRef, userData)
+                    .then(() => {
+                        console.log('User created successfully!');
+                        alert('User created successfully!')
+                    })
+                    .catch((error) => {
+                        console.error('Error creating user: ', error);
+                        alert(error)
+                    });
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error('Error creating user: ', errorMessage);
+                alert(errorMessage);
+            });
+    })
+
+    //registerForm.addEventListener('submit', (e) => {
+    login.addEventListener('submit', (e) => {
+        e.preventDefault();
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+
+
                         const uid = user.uid;
                         const userRef = ref(database, 'users/' + uid);
-                        const userData = {
-                            username: username,
-                            email: email
-                        }
-                        set(userRef, userData)
+                        const now = new Date().toString();
+
+                        update(userRef, { last_login: now })
                             .then(() => {
                                 console.log('User created successfully!');
-                                alert('User created successfully!')
-                            })
-                            .catch((error) => {
+                                alert('User loged in!')
+
+                                return update(userRef, { last_login: now });
+                            }).catch(error => {
+                                console.error(error);
                                 console.error('Error creating user: ', error);
                                 alert(error)
                             });
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.error('Error creating user: ', errorMessage);
-                        alert(errorMessage);
-                    });
+
+
+
+                // // const uid = user.uid;
+                // const userRef = ref(database, 'users/' + uid);
+                // const userData = {
+                //     last_login: db,
+                // }
+                // update(userRef, userData)
+                //     .then(() => {
+
+                //         console.log('User created successfully!');
+                //         alert('User loged in!')
+                //     })
+                //     .catch((error) => {
+                //         console.error('Error creating user: ', error);
+                //         alert(error)
+                //     });
             })
-     
-            //registerForm.addEventListener('submit', (e) => {
-            login.addEventListener('submit', (e) => {
-                e.preventDefault();
-                var email = document.getElementById('email').value;
-                var password = document.getElementById('password').value;
-     
-                signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-     
-     
-                                const uid = user.uid;
-                                const userRef = ref(database, 'users/' + uid);
-                                const now = new Date().toString();
-     
-                                update(userRef, { last_login: now })
-                                    .then(() => {
-                                        console.log('User created successfully!');
-                                        alert('User loged in!')
-     
-                                        return update(userRef, { last_login: now });
-                                    }).catch(error => {
-                                        console.error(error);
-                                        console.error('Error creating user: ', error);
-                                        alert(error)
-                                    });
-     
-     
-     
-                        // // const uid = user.uid;
-                        // const userRef = ref(database, 'users/' + uid);
-                        // const userData = {
-                        //     last_login: db,
-                        // }
-                        // update(userRef, userData)
-                        //     .then(() => {
-     
-                        //         console.log('User created successfully!');
-                        //         alert('User loged in!')
-                        //     })
-                        //     .catch((error) => {
-                        //         console.error('Error creating user: ', error);
-                        //         alert(error)
-                        //     });
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.error('Error creating user: ', errorMessage);
-                        alert(errorMessage);
-                    });
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error('Error creating user: ', errorMessage);
+                alert(errorMessage);
             });
-     
-        </script>
-     
-     
-     
-  </body>
+    });
+
+</script>
+
+</body>
+
 </html>
