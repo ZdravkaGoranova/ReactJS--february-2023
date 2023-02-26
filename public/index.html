@@ -1,43 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <title>Firebase Autentication </title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <body>
+     
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+     
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+            import { getDatabase, ref, set, update } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+            import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+     
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyDRtthwkDX38Eto9gsa1wDDLIdmg1u-Neo",
+                authDomain: "woodworking-d9a7e.firebaseapp.com",
+                databaseURL: "https://woodworking-d9a7e-default-rtdb.firebaseio.com",
+                projectId: "woodworking-d9a7e",
+                storageBucket: "woodworking-d9a7e.appspot.com",
+                messagingSenderId: "260796999866",
+                appId: "1:260796999866:web:fca716eec1a4795d89ba83"
+            };
+     
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const auth = getAuth();
+     
+            // registerForm.addEventListener('submit', (e) => {
+            signUp.addEventListener('submit', (e) => {
+                e.preventDefault();
+                var username = document.getElementById('username').value;
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+     
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in 
+                        const user = userCredential.user;
+                        const uid = user.uid;
+                        const userRef = ref(database, 'users/' + uid);
+                        const userData = {
+                            username: username,
+                            email: email
+                        }
+                        set(userRef, userData)
+                            .then(() => {
+                                console.log('User created successfully!');
+                                alert('User created successfully!')
+                            })
+                            .catch((error) => {
+                                console.error('Error creating user: ', error);
+                                alert(error)
+                            });
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.error('Error creating user: ', errorMessage);
+                        alert(errorMessage);
+                    });
+            })
+     
+            //registerForm.addEventListener('submit', (e) => {
+            login.addEventListener('submit', (e) => {
+                e.preventDefault();
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+     
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+     
+     
+                                const uid = user.uid;
+                                const userRef = ref(database, 'users/' + uid);
+                                const now = new Date().toString();
+     
+                                update(userRef, { last_login: now })
+                                    .then(() => {
+                                        console.log('User created successfully!');
+                                        alert('User loged in!')
+     
+                                        return update(userRef, { last_login: now });
+                                    }).catch(error => {
+                                        console.error(error);
+                                        console.error('Error creating user: ', error);
+                                        alert(error)
+                                    });
+     
+     
+     
+                        // // const uid = user.uid;
+                        // const userRef = ref(database, 'users/' + uid);
+                        // const userData = {
+                        //     last_login: db,
+                        // }
+                        // update(userRef, userData)
+                        //     .then(() => {
+     
+                        //         console.log('User created successfully!');
+                        //         alert('User loged in!')
+                        //     })
+                        //     .catch((error) => {
+                        //         console.error('Error creating user: ', error);
+                        //         alert(error)
+                        //     });
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.error('Error creating user: ', errorMessage);
+                        alert(errorMessage);
+                    });
+            });
+     
+        </script>
+     
+     
+     
   </body>
 </html>
