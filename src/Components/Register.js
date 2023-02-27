@@ -5,15 +5,15 @@ function Register() {
                 <h2>Register</h2>
                 <div className="on-dark">
                     <label for="username">Username:</label>
-                    <input id="username" name="username" type="text" placeholder="Steven" value="" autocomplete="username" />
+                    <input id="username" name="username" type="text" placeholder="Steven" />
                 </div>
                 <div className="on-dark">
                     <label for="email">Email:</label>
-                    <input id="email" name="email" type="text" placeholder="steven@abv.bg" value="" autocomplete="email" />
+                    <input id="email" name="email" type="text" placeholder="steven@abv.bg" />
                 </div>
                 <div className="on-dark">
                     <label for="password">Password:</label>
-                    <input id="password" name="password" type="password" placeholder="********" value="" autocomplete="current-password" />
+                    <input id="password" name="password" type="password" placeholder="********" />
                 </div>
                 <input type="submit" id="signUp" className="btn" name="signUp" value="Sign Up" />
                 <input type="submit" id="login" className="btn" name="login" value="Login" />
