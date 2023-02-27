@@ -25,10 +25,12 @@ section#registerPage a{
 div .on-dark{
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space;
+    gap: 0.25rem;
 }
 
 div .on-dark label{
     width: 7vw;
     margin: 0.2rem;
+    text-align: right;
 }
