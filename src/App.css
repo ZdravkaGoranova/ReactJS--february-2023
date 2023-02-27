@@ -1,0 +1,34 @@
+/* Register */
+
+body{
+    background-color: aliceblue;
+}
+
+section#registerPage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+section#registerPage a{
+    text-decoration: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+.btn{
+    border-radius: 1.5rem;
+    margin: 1rem 0.5rem;
+    background-color: lightblue;
+}
+
+div .on-dark{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+div .on-dark label{
+    width: 7vw;
+    margin: 0.2rem;
+}
